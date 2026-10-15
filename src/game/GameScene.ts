@@ -17,6 +17,8 @@ export class GameScene extends Phaser.Scene {
 
   private dialogueBox!: Phaser.GameObjects.Container;
 
+  private interactionHint!: Phaser.GameObjects.Text;
+
   private dialogueVisible = false;
 
   constructor() {
@@ -171,6 +173,25 @@ export class GameScene extends Phaser.Scene {
     this.npc.setScale(0.35);
 
     this.npc.setDepth(10);
+    this.interactionHint = this.add.text(
+      this.npc.x,
+      this.npc.y - 55,
+      "[ E ] Conversar",
+      {
+        fontFamily: "Arial",
+        fontSize: "16px",
+        color: "#ffffff",
+        backgroundColor: "#111827",
+        padding: {
+          x: 8,
+          y: 5,
+        },
+      },
+    );
+
+    this.interactionHint.setOrigin(0.5);
+    this.interactionHint.setDepth(20);
+    this.interactionHint.setVisible(false);
 
     // =====================================================
     // CAIXA DE DIÁLOGO
@@ -179,14 +200,7 @@ export class GameScene extends Phaser.Scene {
     const boxWidth = 760;
     const boxHeight = 135;
 
-    const boxBackground = this.add.rectangle(
-      0,
-      0,
-      boxWidth,
-      boxHeight,
-      0x111827,
-      0.96,
-    );
+    const boxBackground = this.add.rectangle(0, 0, 700, 140, 0x111827, 0.95);
 
     // Borda mais discreta
     boxBackground.setStrokeStyle(2, 0xd4af37, 0.9);
@@ -195,25 +209,20 @@ export class GameScene extends Phaser.Scene {
     // NOME DO NPC
     // =====================================================
 
-    const npcName = this.add.text(
-      -boxWidth / 2 + 35,
-      -boxHeight / 2 + 25,
-      "Guardião",
-      {
-        fontFamily: "Arial",
-        fontSize: "26px",
-        color: "#f5d76e",
-        fontStyle: "bold",
-      },
-    );
+    const npcName = this.add.text(-300, -48, "Guardião", {
+      fontFamily: "Arial",
+      fontSize: "24px",
+      color: "#f5d76e",
+      fontStyle: "bold",
+    });
 
     // =====================================================
     // TEXTO
     // =====================================================
 
     const dialogueText = this.add.text(
-      -boxWidth / 2 + 35,
-      -boxHeight / 2 + 70,
+      -300,
+      -10,
       "Olá, aventureiro! Tenho uma tarefa que pode interessar a você.",
       {
         fontFamily: "Arial",
@@ -221,10 +230,8 @@ export class GameScene extends Phaser.Scene {
         color: "#ffffff",
 
         wordWrap: {
-          width: boxWidth - 70,
+          width: 580,
         },
-
-        lineSpacing: 8,
       },
     );
 
@@ -232,16 +239,11 @@ export class GameScene extends Phaser.Scene {
     // DICA
     // =====================================================
 
-    const closeHint = this.add.text(
-      boxWidth / 2 - 120,
-      boxHeight / 2 - 40,
-      "[ E ] Fechar",
-      {
-        fontFamily: "Arial",
-        fontSize: "16px",
-        color: "#aab2c0",
-      },
-    );
+    const closeHint = this.add.text(190, 38, "[ E ] Fechar", {
+      fontFamily: "Arial",
+      fontSize: "16px",
+      color: "#cccccc",
+    });
 
     // =====================================================
     // CONTAINER DO DIÁLOGO
@@ -249,7 +251,7 @@ export class GameScene extends Phaser.Scene {
 
     this.dialogueBox = this.add.container(
       this.scale.width / 2,
-      this.scale.height - 150,
+      this.scale.height - 290,
       [boxBackground, npcName, dialogueText, closeHint],
     );
 
@@ -293,6 +295,11 @@ export class GameScene extends Phaser.Scene {
       this.npc.x,
       this.npc.y,
     );
+    if (distance < 100 && !this.dialogueVisible) {
+      this.interactionHint.setVisible(true);
+    } else {
+      this.interactionHint.setVisible(false);
+    }
 
     // =====================================================
     // INTERAÇÃO COM NPC
