@@ -69,8 +69,7 @@ export class GameScene extends Phaser.Scene {
     // TILESET
     // =====================================================
 
-    const tileset = map.addTilesetImage("mapeamento", "tiles", 32, 32, 0, 0);
-
+    const tileset = map.addTilesetImage("mapas", "tiles");
     if (!tileset) {
       console.error("ERRO: não foi possível carregar o tileset.");
 

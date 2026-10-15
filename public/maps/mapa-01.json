@@ -262,8 +262,17 @@
   "tileheight": 32,
   "tilesets": [
     {
-      "firstgid": 25,
-      "source": "mapeamento.tsx"
+      "columns": 12,
+      "firstgid": 1,
+      "image": "../assets/tiles/tileset.png",
+      "imageheight": 64,
+      "imagewidth": 384,
+      "margin": 0,
+      "name": "mapas",
+      "spacing": 0,
+      "tilecount": 24,
+      "tileheight": 32,
+      "tilewidth": 32
     }
   ],
   "tilewidth": 32,
