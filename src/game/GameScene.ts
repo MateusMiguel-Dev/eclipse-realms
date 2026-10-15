@@ -70,9 +70,9 @@ export class GameScene extends Phaser.Scene {
     // =====================================================
 
     const tileset = map.addTilesetImage("mapas", "tiles");
+
     if (!tileset) {
       console.error("ERRO: não foi possível carregar o tileset.");
-
       return;
     }
 
@@ -123,7 +123,8 @@ export class GameScene extends Phaser.Scene {
       "player",
     );
 
-    this.player.setScale(0.5);
+    // Personagem menor
+    this.player.setScale(0.35);
 
     this.player.setDepth(10);
 
@@ -166,7 +167,8 @@ export class GameScene extends Phaser.Scene {
       "npc",
     );
 
-    this.npc.setScale(0.5);
+    // NPC menor
+    this.npc.setScale(0.35);
 
     this.npc.setDepth(10);
 
@@ -174,20 +176,44 @@ export class GameScene extends Phaser.Scene {
     // CAIXA DE DIÁLOGO
     // =====================================================
 
-    const boxBackground = this.add.rectangle(0, 0, 700, 180, 0x111827, 0.95);
+    const boxWidth = 760;
+    const boxHeight = 135;
 
-    boxBackground.setStrokeStyle(3, 0xd4af37);
+    const boxBackground = this.add.rectangle(
+      0,
+      0,
+      boxWidth,
+      boxHeight,
+      0x111827,
+      0.96,
+    );
 
-    const npcName = this.add.text(-320, -70, "Guardião", {
-      fontFamily: "Arial",
-      fontSize: "24px",
-      color: "#f5d76e",
-      fontStyle: "bold",
-    });
+    // Borda mais discreta
+    boxBackground.setStrokeStyle(2, 0xd4af37, 0.9);
+
+    // =====================================================
+    // NOME DO NPC
+    // =====================================================
+
+    const npcName = this.add.text(
+      -boxWidth / 2 + 35,
+      -boxHeight / 2 + 25,
+      "Guardião",
+      {
+        fontFamily: "Arial",
+        fontSize: "26px",
+        color: "#f5d76e",
+        fontStyle: "bold",
+      },
+    );
+
+    // =====================================================
+    // TEXTO
+    // =====================================================
 
     const dialogueText = this.add.text(
-      -320,
-      -30,
+      -boxWidth / 2 + 35,
+      -boxHeight / 2 + 70,
       "Olá, aventureiro! Tenho uma tarefa que pode interessar a você.",
       {
         fontFamily: "Arial",
@@ -195,16 +221,27 @@ export class GameScene extends Phaser.Scene {
         color: "#ffffff",
 
         wordWrap: {
-          width: 620,
+          width: boxWidth - 70,
         },
+
+        lineSpacing: 8,
       },
     );
 
-    const closeHint = this.add.text(180, 55, "[ E ] Fechar", {
-      fontFamily: "Arial",
-      fontSize: "16px",
-      color: "#cccccc",
-    });
+    // =====================================================
+    // DICA
+    // =====================================================
+
+    const closeHint = this.add.text(
+      boxWidth / 2 - 120,
+      boxHeight / 2 - 40,
+      "[ E ] Fechar",
+      {
+        fontFamily: "Arial",
+        fontSize: "16px",
+        color: "#aab2c0",
+      },
+    );
 
     // =====================================================
     // CONTAINER DO DIÁLOGO
@@ -212,14 +249,17 @@ export class GameScene extends Phaser.Scene {
 
     this.dialogueBox = this.add.container(
       this.scale.width / 2,
-      this.scale.height - 130,
+      this.scale.height - 150,
       [boxBackground, npcName, dialogueText, closeHint],
     );
 
+    // Fica preso à tela, independente da câmera
     this.dialogueBox.setScrollFactor(0);
 
+    // Fica acima de todos os elementos
     this.dialogueBox.setDepth(1000);
 
+    // Começa invisível
     this.dialogueBox.setVisible(false);
 
     // =====================================================
@@ -270,7 +310,6 @@ export class GameScene extends Phaser.Scene {
 
     if (this.dialogueVisible) {
       this.player.setVelocity(0, 0);
-
       return;
     }
 
